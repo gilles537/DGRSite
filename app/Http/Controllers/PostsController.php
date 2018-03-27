@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use App\Post;
 use App\Like;
+use App\User;
+use App\Dislike;
 
 class PostsController extends Controller
 {
@@ -98,7 +100,31 @@ class PostsController extends Controller
     public function show($id)
     {
         $post = Post::find($id);
-        return view('posts.show')->with('post',$post);
+
+        // mensen die meegaan in een array gooien
+        $list = Like::where('post_id',$id)->get();
+        $likearray = [];
+        foreach($list as $listitem) {
+            $emailadress = User::find($listitem->user_id)->name;
+            $likearray[] = $emailadress;
+        }
+
+        $list = Dislike::where('post_id',$id)->get();
+        $dislikeArray = [];
+        foreach($list as $listitem) {
+            $emailadress = User::find($listitem->user_id)->name;
+            $dislikeArray[] = $emailadress;
+        }
+
+
+        //array aanmaken voor door te sturen naar view
+        $dataArray = [
+            'post' => $post,
+            'likeArray' => $likearray,
+            'dislikeArray' => $dislikeArray
+            ];
+
+        return view('posts.show')->with('data',$dataArray);
     }
 
     /**
@@ -204,7 +230,15 @@ class PostsController extends Controller
 
     public function dislike($id)
     {
-
+        $dislike = new Dislike();
+        $dislike->user_id = auth()->user()->id;
+        $dislike->post_id = $id;
+        try {
+            $dislike->save();
+        } catch (\Illuminate\Database\QueryException $e) {
+            return redirect('/posts')->with('error',"you've already liked this post");
+        }
+        return redirect('/posts')->with('success',"Post Disliked :'(");
     }
 
 }

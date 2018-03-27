@@ -17,9 +17,8 @@ Route::get('/', function () {
 
 
 Route::get('/posts/{id}/like',['uses' => 'PostsController@like' , 'as' => 'like']);
+Route::get('/posts/{id}/dislike',['uses' => 'PostsController@dislike' , 'as' => 'dislike']);
 Route::resource('posts' , 'PostsController');
-
-
 
 Auth::routes();
 
