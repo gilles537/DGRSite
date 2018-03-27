@@ -21,4 +21,10 @@
             {{Form::submit('Delete' , ['class' => 'btn btn-danger'])}}
         {!! Form::close() !!}
     @endif
+
+    {!! Form::open(['action' => ['PostsController@like',$post->id], 'method' => 'POST']) !!}
+    {{Form::hidden('_method' , 'POST')}}
+    {{Form::submit('Like' , ['class' => 'btn btn-primary'])}}
+    {!! Form::close() !!}
+
 @endsection

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use App\Post;
+use App\Like;
 
 class PostsController extends Controller
 {
@@ -188,4 +189,19 @@ class PostsController extends Controller
         $post->delete();
         return redirect('/posts')->with('success','Post Removed');
     }
+
+    public function like(Request $request,$id)
+    {
+        $like = new Like();
+        $like->user_id = auth()->user()->id;
+        $like->post_id = $id;
+        $like->save();
+        return redirect('/posts')->with('success','Post Liked!');
+    }
+
+    public function dislike($id)
+    {
+
+    }
+
 }
