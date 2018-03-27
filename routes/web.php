@@ -15,7 +15,8 @@ Route::get('/', function () {
     return view('HomePage');
 });
 
-Route::post('/posts/{id}/like', 'PostsController@like');
+
+Route::get('/posts/{id}/like',['uses' => 'PostsController@like' , 'as' => 'like']);
 Route::resource('posts' , 'PostsController');
 
 

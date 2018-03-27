@@ -190,8 +190,7 @@ class PostsController extends Controller
         return redirect('/posts')->with('success','Post Removed');
     }
 
-    public function like(Request $request,$id)
-    {
+    public function like($id) {
         $like = new Like();
         $like->user_id = auth()->user()->id;
         $like->post_id = $id;

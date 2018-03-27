@@ -22,9 +22,6 @@
         {!! Form::close() !!}
     @endif
 
-    {!! Form::open(['action' => ['PostsController@like',$post->id], 'method' => 'POST']) !!}
-    {{Form::hidden('_method' , 'POST')}}
-    {{Form::submit('Like' , ['class' => 'btn btn-primary'])}}
-    {!! Form::close() !!}
+    <a class="btn btn-primary" href="{!! route('like', ['id'=>$post->id]) !!}">Test Like</a>
 
 @endsection
