@@ -195,7 +195,11 @@ class PostsController extends Controller
         $like = new Like();
         $like->user_id = auth()->user()->id;
         $like->post_id = $id;
-        $like->save();
+        try {
+            $like->save();
+        } catch (\Illuminate\Database\QueryException $e) {
+            return redirect('/posts')->with('error',"you've already liked this post");
+        }
         return redirect('/posts')->with('success','Post Liked!');
     }
 

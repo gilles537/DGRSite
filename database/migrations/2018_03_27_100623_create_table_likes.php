@@ -18,6 +18,7 @@ class CreateTableLikes extends Migration
             $table->string('user_id');
             $table->string('post_id');
             $table->timestamps();
+            $table->unique(['user_id', 'post_id']);
         });
     }
 
@@ -28,6 +29,6 @@ class CreateTableLikes extends Migration
      */
     public function down()
     {
-        //
+        Schema::dropIfExists('likes');
     }
 }
