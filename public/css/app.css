@@ -8353,7 +8353,7 @@ button.close {
 header.masthead {
   padding-top: 10rem;
   padding-bottom: calc(10rem - 56px);
-  background-image: url("/storage/cover_images/pet_1522054560.JPG");
+  background-image: url("/storage/cover_images/Wallpaper.jpg");
   background-position: center center;
   background-size: cover;
 }
@@ -8394,9 +8394,5 @@ header.masthead p {
   header.masthead h1 {
     font-size: 4rem;
   }
-}
-
-body {
-  background: blue !important;
 }
 
