@@ -21,4 +21,7 @@
             {{Form::submit('Delete' , ['class' => 'btn btn-danger'])}}
         {!! Form::close() !!}
     @endif
+
+    <a class="btn btn-primary" href="{!! route('like', ['id'=>$post->id]) !!}">Test Like</a>
+
 @endsection

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use App\Post;
+use App\Like;
 
 class PostsController extends Controller
 {
@@ -57,7 +58,7 @@ class PostsController extends Controller
         $this->validate($request, [
             'title' => 'required',
             'body' => 'required',
-            'cover_image' => 'image|nullable|max:1999'
+            'cover_image' => 'image|nullable|max:39999'
         ]);
 
         // Handle File upload
@@ -188,4 +189,22 @@ class PostsController extends Controller
         $post->delete();
         return redirect('/posts')->with('success','Post Removed');
     }
+
+    public function like($id) {
+        $like = new Like();
+        $like->user_id = auth()->user()->id;
+        $like->post_id = $id;
+        try {
+            $like->save();
+        } catch (\Illuminate\Database\QueryException $e) {
+            return redirect('/posts')->with('error',"you've already liked this post");
+        }
+        return redirect('/posts')->with('success','Post Liked!');
+    }
+
+    public function dislike($id)
+    {
+
+    }
+
 }

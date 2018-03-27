@@ -15,8 +15,13 @@ Route::get('/', function () {
     return view('HomePage');
 });
 
+
+Route::get('/posts/{id}/like',['uses' => 'PostsController@like' , 'as' => 'like']);
 Route::resource('posts' , 'PostsController');
+
+
 
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+
