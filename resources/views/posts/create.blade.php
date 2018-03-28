@@ -8,6 +8,10 @@
             {{Form::text('title','',['class' => 'form-control' , 'placeholder' => 'Title'])}}
         </div>
         <div class="form-group">
+            {{Form::label('date' , 'Date')}}
+            {{ Form::text('date', '', array('id' => 'datepicker' , 'class' => 'form-control')) }}
+        </div>
+        <div class="form-group">
             {{Form::label('body' , 'Body')}}
             {{Form::textarea('body','',['id' => 'article-ckeditor' ,'class' => 'form-control' , 'placeholder' => 'Body Text'])}}
         </div>

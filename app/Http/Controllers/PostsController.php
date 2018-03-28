@@ -35,7 +35,7 @@ class PostsController extends Controller
         //$posts = Post::orderBy('title','desc')->take(1)->get();
 
 
-        $posts = Post::orderBy('created_at','desc')->paginate(10);
+        $posts = Post::orderBy('date','desc')->paginate(10);
         return view('posts.index')->with('posts',$posts);
     }
 
@@ -60,6 +60,7 @@ class PostsController extends Controller
         $this->validate($request, [
             'title' => 'required',
             'body' => 'required',
+            'date' => 'required',
             'cover_image' => 'image|nullable|max:39999'
         ]);
 
@@ -84,6 +85,7 @@ class PostsController extends Controller
         $post = new Post;
         $post->title = $request->input('title');
         $post->body = $request->input('body');
+        $post->date = $request->input('date');
         $post->user_id = auth()->user()->id;
         $post->cover_image = $fileNameToStore;
         $post->save();
@@ -220,6 +222,12 @@ class PostsController extends Controller
         $like = new Like();
         $like->user_id = auth()->user()->id;
         $like->post_id = $id;
+
+        //zorgen dat niemand kan liken en disliken gelijkertijd
+        $dislike = Dislike::where('post_id',$id)->where('user_id',auth()->user()->id)->get();
+        if ($dislike->count() > 0)
+            Dislike::destroy($dislike[0]->id);
+
         try {
             $like->save();
         } catch (\Illuminate\Database\QueryException $e) {
@@ -233,10 +241,16 @@ class PostsController extends Controller
         $dislike = new Dislike();
         $dislike->user_id = auth()->user()->id;
         $dislike->post_id = $id;
+
+        //zorgen dat niemand kan liken en disliken gelijkertijd
+        $like = Like::where('post_id',$id)->where('user_id',auth()->user()->id)->get();
+        if ($like->count() > 0)
+            Like::destroy($like[0]->id);
+
         try {
             $dislike->save();
         } catch (\Illuminate\Database\QueryException $e) {
-            return redirect('/posts')->with('error',"you've already liked this post");
+            return redirect('/posts')->with('error',"you've already disliked this post");
         }
         return redirect('/posts')->with('success',"Post Disliked :'(");
     }
