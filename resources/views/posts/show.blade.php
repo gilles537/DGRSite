@@ -20,12 +20,13 @@
             {{Form::hidden('_method' , 'DELETE')}}
             {{Form::submit('Delete' , ['class' => 'btn btn-danger'])}}
         {!! Form::close() !!}
+        <br><br>
     @endif
-
+    @if(strtotime($data['post']->date) > strtotime(date("Y/m/d")))
     <a class="btn btn-success" href="{!! route('like', ['id'=>$data['post']->id]) !!}">We zijn!</a>
-    <a class="btn btn-danger pull-right" href="{!! route('dislike', ['id'=>$data['post']->id]) !!}">Ik kan niet</a>
+    <a class="btn btn-danger pull-right" href="{!! route('dislike', ['id'=>$data['post']->id]) !!}">Nee maat ik kan nie</a>
     <br><br>
-
+    @endif
     <div class="container">
         <p>Mensen die kunnen:</p>
         <ul class="list-group pull-left">
@@ -49,5 +50,26 @@
             @endif
         </ul>
     </div>
+    <p>Commentaar:</p>
+    @if(count($data['commentsArray']) > 0)
+        @for ($x =0 ; $x < count($data['commentsArray']) ; $x++)
+            <li class="list-group-item"><b>{{$data['commentUsers'][$x]}}: </b>{{ $data['commentsArray'][$x]->content }}</li>
+            <br>
+        @endfor
+    @else
+        <p class="text-uppercase" style="color:red" >Nog geen comments :(</p>
+        <br>
+    @endif
 
+    <div class="container">
+    {!! Form::open(['action' => ['PostsController@comment', $data['post']->id], 'method' => 'POST' , 'enctype' => 'multipart/form-data']) !!}
+    <div class="form-group">
+        {{Form::label('comment' , 'Comment')}}
+        {{Form::text('comment','',['class' => 'form-control' , 'placeholder' => 'Voeg een reactie toe:'])}}
+    </div>
+    {{Form::hidden('_method','PUT')}}
+    {{ Form::submit('Submit' , ['class' => 'btn btn-primary'])}}
+    {!! Form::close() !!}
+    </div>
+    <br><br>
 @endsection

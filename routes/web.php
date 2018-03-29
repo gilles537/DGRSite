@@ -16,6 +16,8 @@ Route::get('/', function () {
 });
 
 
+Route::get('posts/old', 'PostsController@index_old');
+Route::put('/posts/{id}/comment','PostsController@comment');
 Route::get('/posts/{id}/like',['uses' => 'PostsController@like' , 'as' => 'like']);
 Route::get('/posts/{id}/dislike',['uses' => 'PostsController@dislike' , 'as' => 'dislike']);
 Route::resource('posts' , 'PostsController');
