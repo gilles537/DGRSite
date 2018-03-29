@@ -8,6 +8,7 @@ use App\Post;
 use App\Like;
 use App\User;
 use App\Dislike;
+use App\Comment;
 
 class PostsController extends Controller
 {
@@ -34,9 +35,15 @@ class PostsController extends Controller
         //$posts = Post::where('title', '$Post Two')->get();
         //$posts = Post::orderBy('title','desc')->take(1)->get();
 
-
-        $posts = Post::orderBy('date','desc')->paginate(10);
+        $posts = Post::where('date' , '>=' , date("Y/m/d"))->orderBy('date','asc')->paginate(10);
+       // $posts = Post::orderBy('date','desc')->paginate(10);
         return view('posts.index')->with('posts',$posts);
+    }
+
+    public function index_old()
+    {
+        $posts = Post::where('date' , '<' , date("Y/m/d"))->orderBy('date','asc')->paginate(10);
+        return view('posts.index_old')->with('posts',$posts);
     }
 
     /**
@@ -60,7 +67,7 @@ class PostsController extends Controller
         $this->validate($request, [
             'title' => 'required',
             'body' => 'required',
-            'date' => 'required',
+            'date' => 'required|date|after:yesterday',
             'cover_image' => 'image|nullable|max:39999'
         ]);
 
@@ -113,9 +120,17 @@ class PostsController extends Controller
 
         $list = Dislike::where('post_id',$id)->get();
         $dislikeArray = [];
+
         foreach($list as $listitem) {
             $emailadress = User::find($listitem->user_id)->name;
             $dislikeArray[] = $emailadress;
+        }
+
+        $comments = $post->comments;
+        $users = [];
+        foreach($comments as $listitem) {
+            $username = User::find($listitem->user_id)->name;
+            $users[] = $username;
         }
 
 
@@ -123,7 +138,9 @@ class PostsController extends Controller
         $dataArray = [
             'post' => $post,
             'likeArray' => $likearray,
-            'dislikeArray' => $dislikeArray
+            'dislikeArray' => $dislikeArray,
+            'commentsArray' => $comments,
+            'commentUsers' => $users
             ];
 
         return view('posts.show')->with('data',$dataArray);
@@ -231,9 +248,9 @@ class PostsController extends Controller
         try {
             $like->save();
         } catch (\Illuminate\Database\QueryException $e) {
-            return redirect('/posts')->with('error',"you've already liked this post");
+            return redirect('/posts')->with('error',"You've already liked this post");
         }
-        return redirect('/posts')->with('success','Post Liked!');
+        return redirect()->action('PostsController@show',['id' => $id])->with('success','Post Liked!');
     }
 
     public function dislike($id)
@@ -250,9 +267,26 @@ class PostsController extends Controller
         try {
             $dislike->save();
         } catch (\Illuminate\Database\QueryException $e) {
-            return redirect('/posts')->with('error',"you've already disliked this post");
+            return redirect('/posts')->with('error',"You've already disliked this post");
         }
-        return redirect('/posts')->with('success',"Post Disliked :'(");
+        return redirect()->action('PostsController@show',['id' => $id])->with('success',"Post Disliked :'(");
+    }
+
+    public function comment(Request $request, $id)
+    {
+        $this->validate($request, [
+            'comment' => 'required'
+        ]);
+
+        $comment = new Comment();
+
+        $comment->user_id = auth()->user()->id;
+        $comment->post_id = $id;
+        $comment->content = $request->input('comment');
+
+        $comment->save();
+
+        return redirect()->action('PostsController@show',['id' => $id])->with('success', 'Commentaar toegevoegd');
     }
 
 }

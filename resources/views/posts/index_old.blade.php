@@ -1,7 +1,9 @@
 @extends('layouts.app')
 
 @section('content')
-    <h1>Bo ver nog nit zen gewist</h1>
+    <h1>Bo ver wel al zen gewist</h1>
+    <a class="btn btn-primary" href="/posts">Naar de nieuwe planning</a>
+    <br><br>
     @if(count($posts) > 0)
         @foreach($posts as $post)
             <div class="well">
@@ -21,6 +23,5 @@
     @else
         <p>No posts found</p>
     @endif
-    <a class="btn btn-primary" href="/posts/old">Naar de oude planning</a>
-    <br><br>
+
 @endsection

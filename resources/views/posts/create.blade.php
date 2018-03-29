@@ -9,7 +9,7 @@
         </div>
         <div class="form-group">
             {{Form::label('date' , 'Date')}}
-            {{ Form::text('date', '', array('id' => 'datepicker' , 'class' => 'form-control')) }}
+            {{ Form::text('date', '', ['id' => 'datepicker', 'class' => 'form-control' ,'placeholder' => 'Date : yyyy-mm-dd']) }}
         </div>
         <div class="form-group">
             {{Form::label('body' , 'Body')}}
