@@ -44,6 +44,9 @@
                                 <a href="/home">Dashboard</a>
                             </li>
                             <li>
+                                <a href="/changePassword">Change Password</a>
+                            </li>
+                            <li>
                                 <a href="{{ route('logout') }}"
                                    onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">

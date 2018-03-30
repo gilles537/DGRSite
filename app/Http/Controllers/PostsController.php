@@ -110,40 +110,7 @@ class PostsController extends Controller
     {
         $post = Post::find($id);
 
-        // mensen die meegaan in een array gooien
-        $list = Like::where('post_id',$id)->get();
-        $likearray = [];
-        foreach($list as $listitem) {
-            $emailadress = User::find($listitem->user_id)->name;
-            $likearray[] = $emailadress;
-        }
-
-        $list = Dislike::where('post_id',$id)->get();
-        $dislikeArray = [];
-
-        foreach($list as $listitem) {
-            $emailadress = User::find($listitem->user_id)->name;
-            $dislikeArray[] = $emailadress;
-        }
-
-        $comments = $post->comments;
-        $users = [];
-        foreach($comments as $listitem) {
-            $username = User::find($listitem->user_id)->name;
-            $users[] = $username;
-        }
-
-
-        //array aanmaken voor door te sturen naar view
-        $dataArray = [
-            'post' => $post,
-            'likeArray' => $likearray,
-            'dislikeArray' => $dislikeArray,
-            'commentsArray' => $comments,
-            'commentUsers' => $users
-            ];
-
-        return view('posts.show')->with('data',$dataArray);
+        return view('posts.show')->with('post',$post);
     }
 
     /**
@@ -230,7 +197,10 @@ class PostsController extends Controller
             // Delete image
             Storage::delete('public/cover_images/'.$post->cover_image);
         }
-
+        
+        $post->likes()->forceDelete();
+        $post->dislikes()->forceDelete();
+        $post->comments()->forceDelete();
         $post->delete();
         return redirect('/posts')->with('success','Post Removed');
     }
@@ -248,7 +218,7 @@ class PostsController extends Controller
         try {
             $like->save();
         } catch (\Illuminate\Database\QueryException $e) {
-            return redirect('/posts')->with('error',"You've already liked this post");
+            return redirect('/posts')->with('error',"Ge gaat al jong pipo");
         }
         return redirect()->action('PostsController@show',['id' => $id])->with('success','Post Liked!');
     }
