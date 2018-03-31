@@ -22,7 +22,7 @@
         {!! Form::close() !!}
         <br><br>
     @endif
-    @if(strtotime($post->date) > strtotime(date("Y/m/d")))
+    @if(strtotime($post->date) >= strtotime(date("Y/m/d")))
     <a class="btn btn-success" href="{!! route('like', ['id'=>$post->id]) !!}">We zijn!</a>
     <a class="btn btn-danger pull-right" href="{!! route('dislike', ['id'=>$post->id]) !!}">Nee maat ik kan nie</a>
     <hr><br>
