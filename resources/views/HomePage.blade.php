@@ -6,7 +6,7 @@
             <div class="row">
                 <div class="col-lg-10 mx-auto">
                     <h1 class="text-uppercase">
-                        <strong>De Gevaarlijke Rovers Official</strong>
+                        <strong style="color: white">De Gevaarlijke Rovers Official</strong>
                     </h1>
                 </div>
             </div>
