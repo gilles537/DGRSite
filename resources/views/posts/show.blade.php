@@ -3,6 +3,7 @@
 @section('content')
     <a href="/posts" class="btn btn-default">Go Back</a>
     <h1>{{$post->title}}</h1>
+    <h4>Datum: {{$post->date}}</h4>
     <div class="container">
         <img class="img-responsive" src="/storage/cover_images/{{$post->cover_image}}" width="460" height="345">
     </div>

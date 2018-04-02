@@ -23,7 +23,6 @@
             </ul>
 
             <ul class="nav navbar-nav">
-                <li class="active"><a href="/">Home</a></li>
                 <li><a href="/posts">Planning</a></li>
                 <li><a href="#contact">Webshop</a></li>
             </ul>
