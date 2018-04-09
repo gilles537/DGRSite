@@ -15,17 +15,15 @@ Route::get('/', function () {
     return view('HomePage');
 });
 
-
 Route::get('posts/old', 'PostsController@index_old');
 Route::put('/posts/{id}/comment','PostsController@comment');
 Route::get('/posts/{id}/like',['uses' => 'PostsController@like' , 'as' => 'like']);
 Route::get('/posts/{id}/dislike',['uses' => 'PostsController@dislike' , 'as' => 'dislike']);
-Route::resource('posts' , 'PostsController');
+Route::resources([
+    'posts' => 'PostsController',
+    'albums' => 'AlbumsController'
+]);
 Route::get('/changePassword',['uses' => 'HomeController@showChangePasswordForm']);
 Route::post('/changePassword','HomeController@changePassword')->name('changePassword');
-
-
 Auth::routes();
-
 Route::get('/home', 'HomeController@index')->name('home');
-
